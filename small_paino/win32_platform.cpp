@@ -1,6 +1,8 @@
+#define WIN32_LEAN_AND_MEAN // make compiling faster
+#define NOMINMAX // fix max and min functions
 #include <Windows.h>
 
-bool running = true;
+static bool running = true;
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     LRESULT result = 0;
@@ -8,13 +10,13 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     case WM_CLOSE:
     case WM_DESTROY: {
         running = false;
-    } break;
-
+        break;
+    } 
     default: {
         result = DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    return result;
 }
 
 
