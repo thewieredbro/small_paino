@@ -44,7 +44,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         result = DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    return result;
 }
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
@@ -66,7 +66,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         clear_screen(0xff5500);
-        draw_rect(0, 0, 0.1, 0.2, 0xff0000);
+        draw_rect(0, 0, 5, 17, 0xff0000);
 
         StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
     }
