@@ -1,5 +1,10 @@
-internal void 
-clear_screen(unsigned int color){
+#include <algorithm>
+#include "renderer.h"
+// make it constant, meaning a true-constant
+// maybe rechange it to global_variable later
+constexpr float render_scale = 0.01f;
+
+void clear_screen(unsigned int color){
     unsigned int* pixel = (unsigned int*)render_state.memory;
     for (int y = 0; y < render_state.height; y++) {
         for (int x = 0; x < render_state.width; x++) {
@@ -8,13 +13,12 @@ clear_screen(unsigned int color){
     }
 }
 
-internal void
-draw_rect_in_pixels(int x0, int y0, int x1, int y1, unsigned int color) {
+void draw_rect_in_pixels(int x0, int y0, int x1, int y1, unsigned int color) {
 
-    x0 = clamp(0, x0, render_state.width);
-    x1 = clamp(0, x1, render_state.width);
-    y0 = clamp(0, y0, render_state.height);
-    y1 = clamp(0, y1, render_state.height);
+    x0 = std::clamp(0, x0, render_state.width);
+    x1 = std::clamp(0, x1, render_state.width);
+    y0 = std::clamp(0, y0, render_state.height);
+    y1 = std::clamp(0, y1, render_state.height);
 
     for (int y = y0; y < y1; y++) {
         unsigned int* pixel = (unsigned int*)render_state.memory + x0 + y * render_state.width;
@@ -24,10 +28,7 @@ draw_rect_in_pixels(int x0, int y0, int x1, int y1, unsigned int color) {
     }
 }
 
-global_variable float render_scale = 0.01f;
-
-internal void
-draw_rect(float x, float y, float half_size_x, float half_size_y, unsigned int color) {
+void draw_rect(float x, float y, float half_size_x, float half_size_y, unsigned int color) {
 
     x *= render_state.width * render_scale;
     y *= render_state.height * render_scale;

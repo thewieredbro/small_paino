@@ -1,16 +1,9 @@
 #include <Windows.h>
-#include "utiles.cpp"
+#include "utiles.h"
+#include "renderer.h"
 
 global_variable bool running = true;
-
-struct Render_State {
-    int height, width;
-    void* memory;
-    BITMAPINFO bitmap_info;
-};
-
-global_variable Render_State render_state;
-#include "renderer.cpp"
+Render_State render_state;
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     LRESULT result = 0;
