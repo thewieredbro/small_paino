@@ -1,16 +1,9 @@
 #include <Windows.h>
-#include "utiles.cpp"
+#include "utiles.h"
+#include "renderer.h"
 
 global_variable bool running = true;
-
-struct Render_State {
-    int height, width;
-    void* memory;
-    BITMAPINFO bitmap_info;
-};
-
-global_variable Render_State render_state;
-#include "renderer.cpp"
+Render_State render_state;
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     LRESULT result = 0;
@@ -66,7 +59,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         clear_screen(0xff5500);
-        draw_rect(0, 0, 0.1, 0.2, 0xff0000);
+        draw_rect(0, 0, 0.1f, 0.2f, 0xff0000);
 
         StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
     }
