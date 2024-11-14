@@ -65,8 +65,17 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             DispatchMessage(&message);
         }
 
-        clear_screen(0xff5500);
-        draw_rect(0, 0, 5, 17, 0xff0000);
+        clear_screen(16777215);
+
+        for (int i = 1; i < 7; ++i) {
+            draw_rect(i + (-1600 + 3200.0 / 7 * i), 0, 10, 3200, 000000);
+        }
+
+        for (int i = 1; i < 7; ++i) {
+            if (i != 3) {
+                draw_rect(i + (-1600 + 3200.0 / 7 * i), 820, 50, 800, 000000);
+            }
+        }
 
         StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
     }
