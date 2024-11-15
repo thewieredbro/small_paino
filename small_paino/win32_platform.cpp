@@ -71,12 +71,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
             ScreenToClient(window, &cursorPos);
 
-            cursorPos.x *= render_state.width * render_scale;
-            cursorPos.y *= render_state.height * render_scale;
-
-            cursorPos.x += render_state.width / 2.f;
-            cursorPos.y += render_state.height / 2.f;
-
             //debugg
             char buffer[50];
             wsprintf(buffer, "X: %ld, Y: %ld", cursorPos.x, cursorPos.y);
