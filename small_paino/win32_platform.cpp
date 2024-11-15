@@ -66,12 +66,15 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
-            POINT cursorPos; GetCursorPos(&cursorPos);
+            POINT cursorPos;
+            GetCursorPos(&cursorPos);
+
+            ScreenToClient(window, &cursorPos);
+
             //debugg
-            POINT p;
-            GetCursorPos(&p);
             char buffer[50];
-            wsprintf(buffer, "X: %ld, Y: %ld", p.x, p.y);
+            wsprintf(buffer, "X: %ld, Y: %ld", cursorPos.x, cursorPos.y);
+
             MessageBox(NULL, buffer, "Mouse Position", MB_OK);
             //end debugg
         }
