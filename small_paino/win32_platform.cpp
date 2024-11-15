@@ -65,6 +65,17 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             DispatchMessage(&message);
         }
 
+        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+            POINT cursorPos; GetCursorPos(&cursorPos);
+            //debugg
+            POINT p;
+            GetCursorPos(&p);
+            char buffer[50];
+            wsprintf(buffer, "X: %ld, Y: %ld", p.x, p.y);
+            MessageBox(NULL, buffer, "Mouse Position", MB_OK);
+            //end debugg
+        }
+
         clear_screen(16777215);
 
         for (int i = 1; i < 7; ++i) {
