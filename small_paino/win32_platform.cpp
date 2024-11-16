@@ -3,22 +3,47 @@
 
 global_variable bool running = true;
 
-struct Render_State {
-    int height, width;
-    void* memory;
-    BITMAPINFO bitmap_info;
+struct Input {
+    bool lMouseButton = false;
+    bool rMouseButton = false;
+
+    POINT cursorPos{};
 };
 
-global_variable Render_State render_state;
+struct Render_State {
+    int height = 0, width = 0;
+    void* memory = nullptr;
+    BITMAPINFO bitmap_info{};
+};
+
+global_variable Input input{};
+global_variable Render_State render_state{};
+
 #include "renderer.cpp"
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     LRESULT result = 0;
-
     switch (uMsg) {
     case WM_CLOSE:
     case WM_DESTROY: {
         running = false;
+    } break;
+
+    case  WM_RBUTTONDOWN: {
+        input.rMouseButton = true;
+    } break;
+    case  WM_RBUTTONUP: {
+        input.rMouseButton = false;
+    } break;
+    case  WM_LBUTTONDOWN: {
+        input.lMouseButton = true;
+    } break;
+    case  WM_LBUTTONUP: {
+        input.lMouseButton = false;
+    } break;
+    case WM_KILLFOCUS: {
+        input.lMouseButton = false;
+        input.rMouseButton = false;
     } break;
 
     case WM_SIZE: {
@@ -48,7 +73,9 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
-    WNDCLASS window_class = {};
+    WNDCLASS window_class = { sizeof(WNDCLASS) };
+    window_class.hCursor = LoadCursor(0, IDC_ARROW);
+    window_class.hInstance = hInstance;
     window_class.style = CS_HREDRAW | CS_VREDRAW;
     window_class.lpszClassName = "small piano";
     window_class.lpfnWndProc = window_callback;
@@ -64,16 +91,16 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             TranslateMessage(&message);
             DispatchMessage(&message);
         }
+        GetCursorPos(&input.cursorPos);
+        ScreenToClient(window, &input.cursorPos);
 
-        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
-            POINT cursorPos;
-            GetCursorPos(&cursorPos);
+        input.cursorPos.x *= 1 / render_scale / render_state.width;
+        input.cursorPos.y *= 1 / render_scale / render_state.height;
 
-            ScreenToClient(window, &cursorPos);
-
+        if (input.lMouseButton) {
             //debugg
             char buffer[50];
-            wsprintf(buffer, "X: %ld, Y: %ld", cursorPos.x, cursorPos.y);
+            wsprintf(buffer, "X: %ld, Y: %ld", input.cursorPos.x, input.cursorPos.y);
 
             MessageBox(NULL, buffer, "Mouse Position", MB_OK);
             //end debugg
@@ -92,6 +119,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         StretchDIBits(hdc, 0, 0, render_state.width, render_state.height, 0, 0, render_state.width, render_state.height, render_state.memory, &render_state.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
+
+        // We want when pressed, not while held, so we reset every frame.
+        input.lMouseButton = false;
+        input.rMouseButton = false;
     }
 
 }
