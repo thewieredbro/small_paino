@@ -94,8 +94,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         GetCursorPos(&input.cursorPos);
         ScreenToClient(window, &input.cursorPos);
 
-        input.cursorPos.x *= 1 / render_scale / render_state.width;
-        input.cursorPos.y *= 1 / render_scale / render_state.height;
+        input.cursorPos.x = input.cursorPos.x / (render_scale * render_state.width);
+        input.cursorPos.y = input.cursorPos.y / (render_scale * render_state.height);
 
         if (input.lMouseButton) {
             //debugg
