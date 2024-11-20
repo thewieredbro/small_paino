@@ -19,6 +19,9 @@ struct Render_State {
 global_variable Input input{};
 global_variable Render_State render_state{};
 
+const int TARGET_FPS = 60;
+const DWORD FRAME_DURATION_MS = 1000 / TARGET_FPS;
+
 #include "renderer.cpp"
 
 LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -84,8 +87,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
     HWND window = CreateWindow(window_class.lpszClassName, "paino", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 1600, 900, 0, 0, hInstance, 0);
     HDC hdc = GetDC(window);
+    DWORD startTime, frameTime;
 
     while (running) {
+        startTime = GetTickCount();
         MSG message;
         while (PeekMessageA(&message, window, 0, 0, PM_REMOVE)) {
             TranslateMessage(&message);
@@ -123,6 +128,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         // We want when pressed, not while held, so we reset every frame.
         input.lMouseButton = false;
         input.rMouseButton = false;
+
+        frameTime = GetTickCount() - startTime;
+
+        if (frameTime < FRAME_DURATION_MS) {
+            Sleep(FRAME_DURATION_MS - frameTime);
+        }
+    
     }
 
 }
