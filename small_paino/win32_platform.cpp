@@ -20,7 +20,7 @@ global_variable Input input{};
 global_variable Render_State render_state{};
 
 constexpr int FPS_CAP = 60;
-const ULONGLONG FRAME_DURATION_MS = 1000 / FPS_CAP;
+constexpr ULONGLONG FRAME_DURATION_MS = 1000 / FPS_CAP;
 
 #include "renderer.cpp"
 

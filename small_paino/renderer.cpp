@@ -24,7 +24,7 @@ draw_rect_in_pixels(int x0, int y0, int x1, int y1, unsigned int color) {
     }
 }
 
-const global_variable float render_scale = 0.00031f;
+constexpr global_variable float render_scale = 0.00031f;
 
 internal void
 draw_rect(float x, float y, float half_size_x, float half_size_y, unsigned int color) {
