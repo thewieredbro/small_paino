@@ -19,8 +19,8 @@ struct Render_State {
 global_variable Input input{};
 global_variable Render_State render_state{};
 
-const int TARGET_FPS = 60;
-const DWORD FRAME_DURATION_MS = 1000 / TARGET_FPS;
+constexpr int FPS_CAP = 60;
+const ULONGLONG FRAME_DURATION_MS = 1000 / FPS_CAP;
 
 #include "renderer.cpp"
 
@@ -87,10 +87,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
     HWND window = CreateWindow(window_class.lpszClassName, "paino", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 1600, 900, 0, 0, hInstance, 0);
     HDC hdc = GetDC(window);
-    DWORD startTime, frameTime;
+    ULONGLONG startTime, frameTime;
 
     while (running) {
-        startTime = GetTickCount();
+        startTime = GetTickCount64();
         MSG message;
         while (PeekMessageA(&message, window, 0, 0, PM_REMOVE)) {
             TranslateMessage(&message);
@@ -129,7 +129,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         input.lMouseButton = false;
         input.rMouseButton = false;
 
-        frameTime = GetTickCount() - startTime;
+        frameTime = GetTickCount64() - startTime;
 
         if (frameTime < FRAME_DURATION_MS) {
             Sleep(FRAME_DURATION_MS - frameTime);
