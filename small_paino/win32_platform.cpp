@@ -103,6 +103,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         input.cursorPos.y = input.cursorPos.y / (render_scale * render_state.height);
 
         if (input.lMouseButton) {
+            Beep(261, 1000);
             //debugg
             char buffer[50];
             wsprintf(buffer, "X: %ld, Y: %ld", input.cursorPos.x, input.cursorPos.y);
